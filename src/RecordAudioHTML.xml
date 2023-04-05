@@ -39,15 +39,17 @@
             <propertyGroup caption="File Management">
                 <property key="microflowCall" type="string">
                     <caption>Save Audio Microflow</caption>
-                    <description>Name of the microflow that wil handle the new audio. Formatted as "YourModuleName.MicroflowName"</description>
-                </property>
-                <property key="audioFileDataSource" type="datasource" isList="true">
-                    <caption>Audio File source</caption>
-                    <description />
+                    <description>Name of the microflow that will handle the new audio. Formatted as "YourModuleName.MicroflowName"</description>
                 </property>
                 <property key="entityName" type="string">
                     <caption>Audio File Entity</caption>
                     <description>Name of entity to save audio file as. Must be of type System.FileDocument. Formatted as "YourModuleName.EntityName"</description>
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="Events">
+                <property key="onClick" type="action" required="false">
+                    <caption>On click action</caption>
+                    <description />
                 </property>
             </propertyGroup>
 

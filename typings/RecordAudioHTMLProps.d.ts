@@ -4,7 +4,7 @@
  * @author Mendix UI Content Team
  */
 import { CSSProperties } from "react";
-import { EditableValue, ListValue } from "mendix";
+import { ActionValue, EditableValue } from "mendix";
 
 export interface RecordAudioHTMLContainerProps {
     name: string;
@@ -15,8 +15,8 @@ export interface RecordAudioHTMLContainerProps {
     showInstructions: boolean;
     saveLocation: string;
     microflowCall: string;
-    audioFileDataSource: ListValue;
     entityName: string;
+    onClick?: ActionValue;
 }
 
 export interface RecordAudioHTMLPreviewProps {
@@ -26,6 +26,6 @@ export interface RecordAudioHTMLPreviewProps {
     showInstructions: boolean;
     saveLocation: string;
     microflowCall: string;
-    audioFileDataSource: {} | null;
     entityName: string;
+    onClick: {} | null;
 }

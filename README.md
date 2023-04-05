@@ -24,7 +24,7 @@ Tested in Mendix Studio Pro version 9.18.2
 
 ## Modify code
 Navigate to `/src` and edit files
- - `RecordAudioWidget.xml` is the widget properties menu that displays in Mendix Studio Pro.
+ - `RecordAudioHTML.xml` is the widget properties menu that displays in Mendix Studio Pro.
  - `/components/RecordAudio.tsx` is where the primary rendering code for the widget is.
 
 ## Build widget
@@ -51,7 +51,8 @@ For example, to have the compiled widget copied to a Mendix Studio Project calle
 ## Setting Up
 ### To add the widget to your project
 1. Download this repository
-2. Move the file `byu.RecordAudioWidget.mpk` from `/dist/1.0.0.` to your Mendix application's `widgets` folder
+2. Move the file `edu.byu.widget.web.RecordAudioHTML.mpk` from `/dist/1.0.0.` to your 
+Mendix application's `widgets` folder
 3. In Studio Pro, press F4 or navigate to App -> Synchronize App Directory, and click this option.
 
 ### Making the widget functional
@@ -109,7 +110,7 @@ Or you can hide the instructions panel entirely.
 [link to sandbox]
 
 ## Issues, suggestions and feature requests
-[Issues Page](https://github.com/laurenra7/recordAudioWidget/issues)
+[Issues Page](https://github.com/laurenra7/RecordAudioHTML/issues)
 
 ## Development and contribution
 [specify contribute]
