@@ -13,8 +13,6 @@ export default class RecordAudioHTML extends Component<RecordAudioHTMLContainerP
                 style={this.props.style}
                 className={this.props.class}
                 tabIndex={this.props.tabIndex}
-                showInstructs={this.props.showInstructions}
-                locationVal={this.props.saveLocation}
                 microflowString={this.props.microflowCall}
                 entityString={this.props.entityName}
 

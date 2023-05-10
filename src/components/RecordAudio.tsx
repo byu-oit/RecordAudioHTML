@@ -11,15 +11,12 @@ export interface RecordAudioProps {
     hasError?: boolean;
     required?: boolean;
     disabled?: boolean;
-    showInstructs?: boolean;
-    locationVal?: string;
     microflowString?: string;
     entityString?: string;
 }
 
 export interface RecordAudioState {
     isRecordingSupported: boolean;
-    // micList?: MediaDeviceInfo[];
     isRecordingStarted: boolean;
     isRecording: boolean;
     isPaused: boolean;
@@ -42,16 +39,12 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
     constructor(props: RecordAudioProps) {
         super(props);
         let isRecordingSupported = true;
-        let deviceList = [MediaDeviceInfo];
-        // const inText = this.props.inText
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             if (MediaRecorder.isTypeSupported(RecordAudio.mimeType)) {
                 isRecordingSupported = true;
                 /* List the recording devices to let the user choose. Returns an array of InputDeviceInfo */
                 navigator.mediaDevices.enumerateDevices().then((deviceList) => {
-                    // devices = devices.filter((deviceInfo) => deviceInfo.kind === 'audioinput');
                     deviceList = deviceList.filter((deviceInfo) => deviceInfo.kind === 'audioinput');
-                    // devices.forEach(entry => deviceList.push(Object.assign({}, entry)));
                     console.log('Devices = ' + deviceList);
                 });
             }
@@ -123,13 +116,6 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                             }
 
                             stream.getAudioTracks().forEach( track => track.stop());
-
-                            // const reader = new FileReader();
-                            // reader.onload = function(e){
-                            //     // window.location.href = reader.result;
-                            // };
-                            // const blobUrl = reader.readAsDataURL(audioBlob);
-                            /* don't forget to URL.revokeObjectURL() the audioUrl to release it when done playing/downloading/storing it */
                         });
 
                         this.setState( { mediaRecorder: mediaRecorder});
@@ -242,7 +228,6 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         const isRecordButtonsEnabled = this.state.isRecordButtonsEnabled;
         const isRecording = this.state.isRecording;
         const isDone = this.state.isDone;
-        const showInstructions = true;
         return !isRecordingSupported ? <div className="not-supported">Recording not supported in this browser.</div> :
             <div className="outer-container">
                 <div className="widget-record-audio">
@@ -291,16 +276,6 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                             <span className="glyphicon glyphicon-remove"></span>
                         </button>
                     </div>
-                </div>
-                <div className="instructions" style={ { display : this.props.showInstructs ? "block" : "none" }}>
-                    <ol>
-                        <li><span className="btn-record-circle-small" style={ { margin: "-1px 2px" } }></span> record.
-                            &nbsp;<span className="glyphicon glyphicon-pause" style={ { color: "red" } }></span> pause.</li>
-                        <li><span className="glyphicon glyphicon-stop"></span> stop.
-                            &nbsp;<span className="glyphicon glyphicon-play"></span> play.</li>
-                        <li><span className="glyphicon glyphicon-plus" style={ { margin: "0px 0px 10px 0px" } }></span> name recording and save it to {this.props.locationVal}.</li>
-                    </ol>
-                    <span style={ { margin : "0px 0px 15px 15px"} }><span className="glyphicon glyphicon-remove"></span> to delete recording and start a new one.</span>
                 </div>
             </div>
     }

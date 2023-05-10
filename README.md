@@ -7,7 +7,7 @@ Created by Lauren Anderson, 2020
 
 Updated by Jacob Thomsen, 2023
 
-Tested in Mendix Studio Pro version 9.18.2
+Created in Mendix Studio Pro version 9.18.2
 
 ## Features
 - Mendix pluggable widget records audio using HTML 
@@ -87,27 +87,20 @@ which now contains the audio file- as you please.
 These are the required settings of the widget you will need to set in order to use the widget.
 - Set the Data source of the widget to be the Url string of the given entity.*
 
-#### Instructions
-- You can select whether you would like to display the instructions section of the widget.
-- Enter a descriptive string of where the audio files will be saved.
-
-#### File Management
-- Enter the title of the Microflow you made to handle the audio file when the save recording button is selected.*
-- Enter the title of the persistable entity you created to store the audio file.*
-
-(* required)
+#### Audio File Management
+- Enter the title of the Microflow you made to handle the audio file when the save recording button is selected.
+- Enter the title of the persistable entity you created to store the audio file.
 
 ![img_3.png](readme_images/img_3.png)
 
 ## User Interaction
 Once you have the widget set up, it should look like this on the web page.
-As noted above, you can customize the end of step 3 with your own description. 
-Or you can hide the instructions panel entirely.
 
 ![img_5.png](readme_images/img_5.png)
+![img_6.png](readme_images/img_6.png)
+![img_7.png](readme_images/img_7.png)
 
-## Demo project
-[link to sandbox]
+You can use other widgets like HTMLSnippet's to create an instructions panel for this Recording Widget.
 
 ## Issues, suggestions and feature requests
 [Issues Page](https://github.com/laurenra7/RecordAudioHTML/issues)

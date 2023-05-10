@@ -26,32 +26,33 @@
             <propertyGroup caption="Visibility">
                 <systemProperty key="Visibility"/>
             </propertyGroup>
-            <propertyGroup caption="Instructions">
-                <property key="showInstructions" type="boolean" defaultValue="false">
-                    <caption>Show Instructions?</caption>
-                    <description></description>
-                </property>
-                <property key="saveLocation" type="string" required="false">
-                    <caption>Save Location</caption>
-                    <description>Descriptive location of where audio files will be saved. This string is displayed in Step 3 of the instructions panel</description>
-                </property>
-            </propertyGroup>
-            <propertyGroup caption="File Management">
-                <property key="microflowCall" type="string">
-                    <caption>Save Audio Microflow</caption>
-                    <description>Name of the microflow that will handle the new audio. Formatted as "YourModuleName.MicroflowName"</description>
-                </property>
+            <propertyGroup caption="Audio File Management">
                 <property key="entityName" type="string">
                     <caption>Audio File Entity</caption>
-                    <description>Name of entity to save audio file as. Must be of type System.FileDocument. Formatted as "YourModuleName.EntityName"</description>
+                    <description>Name of entity to store audio files.
+Must be generalized from System.FileDocument.
+Ex: "YourModuleName.EntityName"</description>
+                </property>
+                <property key="microflowCall" type="string">
+                    <caption>Save Audio Microflow</caption>
+                    <description>Name of the microflow that will handle the new audio object.
+                        Ex: "YourModuleName.MicroflowName"</description>
                 </property>
             </propertyGroup>
-            <propertyGroup caption="Events">
-                <property key="onClick" type="action" required="false">
-                    <caption>On click action</caption>
+<!--            THIS WAS FOR ALTERNATE IDEAS ON GETTING THE MICROFLOW AND ENTITY NAME, IT CAN PROBABLY BE DELETED  -->
+<!--
+            <propertyGroup caption="Data Connections">
+                <property key="dataHandler" type="action">
+                    <caption>Flow to handle new audio</caption>
                     <description />
                 </property>
+
+                <property key="audioEntity" type="datasource" isList="true" required="false">
+                    <caption>Audio Entity</caption>
+                    <description>System.FileDocument type entity to hold audio</description>
+                </property>
             </propertyGroup>
+-->
 
         </propertyGroup>
         <propertyGroup caption="Common">
