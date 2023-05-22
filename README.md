@@ -79,8 +79,8 @@ app domain model.
 
 ![HandlerFlow1.png](readme_images/HandlerFlow1.png)
 
-To copy the System.FileDocument using the Java Action in this microflow, you will need to import the Community Commons
-module into your application. 
+*To copy the System.FileDocument using the Java Action in this microflow, you will need to import the Community Commons
+module into your application.* 
 
 ## User Interaction
 Once you have the widget set up, it should look like this on the web page.
