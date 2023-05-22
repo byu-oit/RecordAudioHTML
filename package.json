@@ -6,7 +6,7 @@
   "copyright": "2020 BYU",
   "author": "Lauren Anderson",
   "config": {
-    "projectPath": "C:\\Users\\jat0220\\Documents\\Mendix\\HTML Audio-main",
+    "projectPath": "",
     "mendixHost": "http://localhost:8080",
     "developmentPort": "3000"
   },

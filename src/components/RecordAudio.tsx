@@ -1,8 +1,8 @@
 import { CSSProperties, Component, ReactNode, createElement } from "react";
+import {ActionValue, EditableValue, ListValue} from "mendix";
 
 export interface RecordAudioProps {
-    fileUrl?: (value: string) => void;
-    testStuff?: string;
+    // fileUrl?: (value: string) => void;
     className?: string;
     index?: number;
     style?: CSSProperties;
@@ -13,6 +13,7 @@ export interface RecordAudioProps {
     disabled?: boolean;
     microflowString?: string;
     entityString?: string;
+    actionEntity?: ActionValue;
 }
 
 export interface RecordAudioState {
@@ -30,6 +31,7 @@ export interface RecordAudioState {
 export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
 
     static mimeType: string = 'audio/webm;codecs=opus';
+    saveCounter: number = 1;
 
     /**
      * Check to see if browser supports getUserMedia for recording before doing anything else.
@@ -111,9 +113,11 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                             this.setState( { audioUrl: audioUrl, audioBlob: audioBlob, isRecording: false, isDone: true });
 
                             /* Update audioFileUrl attribute with the Blob URL */
+/*
                             if (this.props.fileUrl) {
                                 this.props.fileUrl(audioUrl);
                             }
+*/
 
                             stream.getAudioTracks().forEach( track => track.stop());
                         });
@@ -150,20 +154,39 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
 
     saveRecording = () => {
         const audioBlob = this.state.audioBlob;
-        const microFlowName = this.props.microflowString!;
-        const entityName = this.props.entityString!;
+        //const microFlowName = this.props.microflowString!;
+        //const entityName = this.props.entityString!;
+        const actionFlow = this.props.actionEntity
+        const counter = this.saveCounter;
 
         mx.data.create({
-            entity: entityName,
+            entity: "System.FileDocument",
             callback : function (obj) {
                 obj.set("Name", "recording.weba");
 
                 mx.data.saveDocument(
                     obj.toString(),
-                    "new_audio.weba",
+                    "new_audio" + counter + ".weba",
                     {},
                     audioBlob as Blob,
                     function (){
+                        mx.data.commit({
+                            mxobj: obj,
+                            callback: function () {
+                                if (actionFlow?.canExecute) actionFlow.execute()
+                            },
+                            error: function (error) {
+                              mx.ui.error(`Error attempting to save audio.\nContact app support\n\n Error type: (2) ${error}`)
+                            }
+                        })
+/*
+                        if (actionFlow?.canExecute) {
+                            actionFlow?.execute()
+                        } else {
+                            mx.ui.error('Error calling action to handle new audio entity.\nContact app support\n\n Error type: (1)')
+                        }
+*/
+/*
                         mx.data.action({
                             params: {
                                 applyto: "selection",
@@ -173,8 +196,8 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                             callback: function (){},    // Success
 
                             error: function(error) {
-                                /* Error in microflow call
-                                Likely an incorrect Microflow name listed in widget options, check microflowName variable */
+                                /!* Error in microflow call
+                                Likely an incorrect Microflow name listed in widget options, check microflowName variable *!/
                                 alert(`Error attempting to save audio.\nContact app support.\n\n (1) ${error}`)
                                 mx.data.remove({
                                     guid: obj.toString(),
@@ -184,10 +207,11 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
 
                             }
                         });
+*/
                     },
                     function (error) {
                         // Error in save document call
-                        alert(`Error attempting to save audio.\nContact app support\n\n (2) ${error}`)
+                        mx.ui.error(`Error attempting to save audio.\nContact app support\n\n Error type: (2) ${error}`)
                         mx.data.remove({
                             guid: obj.toString(),
                             callback: function () {},       // Success
@@ -200,9 +224,10 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
             error: function (error) {
                 // Error in create entity call
                 // Likely an incorrect entity name listed in widget options, check entityName variable
-                alert(`Error creating audio file.\nContact app support.\n\n (3) ${error}`)
+                mx.ui.error(`Error creating audio file.\nContact app support.\n\n Error type: (3) ${error}`)
             }
         })
+        this.saveCounter++
     };
 
     deleteRecording = () => {

@@ -7,7 +7,10 @@ Created by Lauren Anderson, 2020
 
 Updated by Jacob Thomsen, 2023
 
-Created in Mendix Studio Pro version 9.18.2
+Created in Mendix Studio Pro version 9.18.2.
+Functional in 8.18.24, but not 7.23.35.
+
+*Community Commons Module recommended for full functionality* [Download](https://marketplace.mendix.com/link/component/170)
 
 ## Features
 - Mendix pluggable widget records audio using HTML 
@@ -55,43 +58,29 @@ For example, to have the compiled widget copied to a Mendix Studio Project calle
 Mendix application's `widgets` folder
 3. In Studio Pro, press F4 or navigate to App -> Synchronize App Directory, and click this option.
 
-### Making the widget functional
-To use the widget, there are a few items you will need complete in your project.
-1. In your Domain Model, add a first entity, non-persistable, with these fields:  
-Url : String,  
-Filename : String,  
-Title : String,   
-isUrlDisplayed : Boolean (Default: false)
+## Using the Widget
+![image_1.png](readme_images/image_1.png)
 
-This entity is used to generate audio blob urls, which are how MediaRecorder stores the audio within the browser.
+Once the widget is in your project and available to be used. Just place the widget on to your page of choice. 
+It can now record audio and save it as a System.FileDocument entity in your app database!
 
-2. Add a persistable entity that is a generalization of System.FileDocument, with one attribute, Title : String
+### Customizing How The New Audio Is Handled
 
-![img.png](readme_images/img.png)
+With this widget, you can do more than just save the audio as a new System.FileDocument entity.
 
-3. Create a Microflow, named however you please, that returns and creates an instance of the first entity.
-
-![img_1.png](readme_images/img_1.png)
-
-4. On the page where you would like to have the widget, add a DataView which calls the microflow you just created. 
-5. In the DataView, below the Text Box, place the widget.
+To save the audio into an entity within your own domain model, change the Handler Action in the widget configuration
+to Microflow, Nanoflow, or Show A Page. Other options in this dropdown may be selected, but functionality of the widget
+is not guaranteed.
 
 ![img_2.png](readme_images/img_2.png)
 
-6. Create a Microflow that takes an instance of the persistable entity as a paramter and then handles the entity-
-which now contains the audio file- as you please.
+Here is an example of a microflow that can be used to handle the FileDocument and use it to create an entity in your
+app domain model.
 
-![img_4.png](readme_images/img_4.png)
+![HandlerFlow1.png](readme_images/HandlerFlow1.png)
 
-### Widget Settings
-These are the required settings of the widget you will need to set in order to use the widget.
-- Set the Data source of the widget to be the Url string of the given entity.*
-
-#### Audio File Management
-- Enter the title of the Microflow you made to handle the audio file when the save recording button is selected.
-- Enter the title of the persistable entity you created to store the audio file.
-
-![img_3.png](readme_images/img_3.png)
+To copy the System.FileDocument using the Java Action in this microflow, you will need to import the Community Commons
+module into your application. 
 
 ## User Interaction
 Once you have the widget set up, it should look like this on the web page.
@@ -102,8 +91,5 @@ Once you have the widget set up, it should look like this on the web page.
 
 You can use other widgets like HTMLSnippet's to create an instructions panel for this Recording Widget.
 
-## Issues, suggestions and feature requests
+## Issues, suggestions, and feature requests
 [Issues Page](https://github.com/laurenra7/RecordAudioHTML/issues)
-
-## Development and contribution
-[specify contribute]
