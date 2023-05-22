@@ -86,8 +86,8 @@ module into your application.*
 Once you have the widget set up, it should look like this on the web page.
 
 ![img_5.png](readme_images/img_5.png)
-![img_6.png](readme_images/img_6.png)
-![img_7.png](readme_images/img_7.png)
+![img_6.png](readme_images/img_6.PNG)
+![img_7.png](readme_images/img_7.PNG)
 
 You can use other widgets like HTMLSnippet's to create an instructions panel for this Recording Widget.
 
