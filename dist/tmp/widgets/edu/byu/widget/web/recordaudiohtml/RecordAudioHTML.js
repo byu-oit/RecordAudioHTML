@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "636a300a2471e8a8f972";
+/******/ 	var hotCurrentHash = "9324296216b339cd2bec";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1538,13 +1538,7 @@ var RecordAudioHTML = /** @class */ (function (_super) {
     }
     //private readonly audioFileUrlHandler = this.setAudioFileUrl.bind(this);
     RecordAudioHTML.prototype.render = function () {
-        return Object(react__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_components_RecordAudio__WEBPACK_IMPORTED_MODULE_1__["RecordAudio"]
-        // fileUrl={this.audioFileUrlHandler}
-        , { 
-            // fileUrl={this.audioFileUrlHandler}
-            style: this.props.style, className: this.props.class, tabIndex: this.props.tabIndex, 
-            // entityString={this.props.entityName}
-            actionEntity: this.props.actionEntity });
+        return Object(react__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_components_RecordAudio__WEBPACK_IMPORTED_MODULE_1__["RecordAudio"], { style: this.props.style, className: this.props.class, tabIndex: this.props.tabIndex, actionItem: this.props.actionItem });
     };
     return RecordAudioHTML;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
@@ -1605,8 +1599,7 @@ var RecordAudio = /** @class */ (function (_super) {
                     // only audio needed for this app
                     {
                         audio: true
-                    })
-                        .then(function (stream) {
+                    }).then(function (stream) {
                         /* Initialize a new MediaRecorder */
                         var mediaOptions = {
                             mimeType: RecordAudio.mimeType
@@ -1625,12 +1618,6 @@ var RecordAudio = /** @class */ (function (_super) {
                             var audioBlob = new Blob(audioChunks, { 'type': RecordAudio.mimeType });
                             var audioUrl = URL.createObjectURL(audioBlob);
                             _this.setState({ audioUrl: audioUrl, audioBlob: audioBlob, isRecording: false, isDone: true });
-                            /* Update audioFileUrl attribute with the Blob URL */
-                            /*
-                                                        if (this.props.fileUrl) {
-                                                            this.props.fileUrl(audioUrl);
-                                                        }
-                            */
                             stream.getAudioTracks().forEach(function (track) { return track.stop(); });
                         });
                         _this.setState({ mediaRecorder: mediaRecorder });
@@ -1646,7 +1633,6 @@ var RecordAudio = /** @class */ (function (_super) {
         };
         _this.stopRecording = function () {
             if (_this.state.isRecording) {
-                var mediaRecorder = _this.state.mediaRecorder;
                 if (_this.state.mediaRecorder) {
                     _this.state.mediaRecorder.stop();
                 }
@@ -1660,9 +1646,7 @@ var RecordAudio = /** @class */ (function (_super) {
         };
         _this.saveRecording = function () {
             var audioBlob = _this.state.audioBlob;
-            //const microFlowName = this.props.microflowString!;
-            //const entityName = this.props.entityString!;
-            var actionFlow = _this.props.actionEntity;
+            var actionItem = _this.props.actionItem;
             var counter = _this.saveCounter;
             mx.data.create({
                 entity: "System.FileDocument",
@@ -1672,56 +1656,29 @@ var RecordAudio = /** @class */ (function (_super) {
                         mx.data.commit({
                             mxobj: obj,
                             callback: function () {
-                                if (actionFlow === null || actionFlow === void 0 ? void 0 : actionFlow.canExecute)
-                                    actionFlow.execute();
+                                if (actionItem === null || actionItem === void 0 ? void 0 : actionItem.canExecute)
+                                    actionItem.execute();
                             },
                             error: function (error) {
-                                mx.ui.error("Error attempting to save audio.\nContact app support\n\n Error type: (2) " + error);
+                                mx.ui.error("Error attempting to save audio.\nContact app support\n\n 1: " + error);
                             }
                         });
-                        /*
-                                                if (actionFlow?.canExecute) {
-                                                    actionFlow?.execute()
-                                                } else {
-                                                    mx.ui.error('Error calling action to handle new audio entity.\nContact app support\n\n Error type: (1)')
-                                                }
-                        */
-                        /*
-                                                mx.data.action({
-                                                    params: {
-                                                        applyto: "selection",
-                                                        actionname: microFlowName,
-                                                        guids: [obj.toString()]
-                                                    },
-                                                    callback: function (){},    // Success
-                        
-                                                    error: function(error) {
-                                                        /!* Error in microflow call
-                                                        Likely an incorrect Microflow name listed in widget options, check microflowName variable *!/
-                                                        alert(`Error attempting to save audio.\nContact app support.\n\n (1) ${error}`)
-                                                        mx.data.remove({
-                                                            guid: obj.toString(),
-                                                            callback: function () {},   // Success
-                                                            error: function () {}       // Error deleting object
-                                                        })
-                        
-                                                    }
-                                                });
-                        */
                     }, function (error) {
                         // Error in save document call
-                        mx.ui.error("Error attempting to save audio.\nContact app support\n\n Error type: (2) " + error);
+                        mx.ui.error("Error attempting to save audio.\nContact app support\n\n 2: " + error);
                         mx.data.remove({
                             guid: obj.toString(),
                             callback: function () { },
-                            error: function () { } // Error deleting object
+                            error: function () {
+                                mx.ui.error("Error attempting to save audio.\nContact app support\n\n 3: " + error);
+                            } // Error deleting object
                         });
                     });
                 },
                 error: function (error) {
                     // Error in create entity call
                     // Likely an incorrect entity name listed in widget options, check entityName variable
-                    mx.ui.error("Error creating audio file.\nContact app support.\n\n Error type: (3) " + error);
+                    mx.ui.error("Error creating audio file.\nContact app support.\n\n 4: " + error);
                 }
             });
             _this.saveCounter++;

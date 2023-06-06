@@ -9,20 +9,10 @@ export default class RecordAudioHTML extends Component<RecordAudioHTMLContainerP
     //private readonly audioFileUrlHandler = this.setAudioFileUrl.bind(this);
     render(): ReactNode {
         return <RecordAudio
-                // fileUrl={this.audioFileUrlHandler}
                 style={this.props.style}
                 className={this.props.class}
                 tabIndex={this.props.tabIndex}
-                // entityString={this.props.entityName}
-                actionEntity={this.props.actionEntity}
+                actionItem={this.props.actionItem}
         />
     }
-
-    /* Set Audio File Url attribute (string) in DataView */
-/*
-    setAudioFileUrl(value: string): void {
-        this.props.audioFileUrl.setValue(value);
-        this.forceUpdate();
-    }
-*/
 }

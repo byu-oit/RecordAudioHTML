@@ -11,11 +11,11 @@ export interface RecordAudioHTMLContainerProps {
     class: string;
     style?: CSSProperties;
     tabIndex: number;
-    actionEntity?: ActionValue;
+    actionItem?: ActionValue;
 }
 
 export interface RecordAudioHTMLPreviewProps {
     class: string;
     style: string;
-    actionEntity: {} | null;
+    actionItem: {} | null;
 }

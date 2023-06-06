@@ -1,5 +1,5 @@
 import { CSSProperties, Component, ReactNode, createElement } from "react";
-import {ActionValue, EditableValue, ListValue} from "mendix";
+import {ActionValue} from "mendix";
 
 export interface RecordAudioProps {
     // fileUrl?: (value: string) => void;
@@ -8,12 +8,7 @@ export interface RecordAudioProps {
     style?: CSSProperties;
     tabIndex?: number;
     id?: string;
-    hasError?: boolean;
-    required?: boolean;
-    disabled?: boolean;
-    microflowString?: string;
-    entityString?: string;
-    actionEntity?: ActionValue;
+    actionItem?: ActionValue;
 }
 
 export interface RecordAudioState {
@@ -88,45 +83,33 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                     {
                         audio: true
                     }
-                )
-                    .then(stream => {
-                        /* Initialize a new MediaRecorder */
-                        const mediaOptions = {
-                            mimeType: RecordAudio.mimeType
-                        };
-                        const mediaRecorder = new MediaRecorder(stream, mediaOptions);
-                        mediaRecorder.start();
-                        const audioChunks: any = [];
+                ).then(stream => {
+                    /* Initialize a new MediaRecorder */
+                    const mediaOptions = {
+                        mimeType: RecordAudio.mimeType
+                    };
+                    const mediaRecorder = new MediaRecorder(stream, mediaOptions);
+                    mediaRecorder.start();
+                    const audioChunks: any = [];
 
-                        /* Event listener for when new data is available from recording device. */
-                        mediaRecorder.addEventListener("dataavailable", event => {
-                            audioChunks.push(event.data);
-                        });
-                        this.setState( { isRecordingStarted: true, isRecording: true });
+                    /* Event listener for when new data is available from recording device. */
+                    mediaRecorder.addEventListener("dataavailable", event => {
+                        audioChunks.push(event.data);
+                    });
+                    this.setState( { isRecordingStarted: true, isRecording: true });
 
-                        /* Event listener for "stop" event.*/
-                        mediaRecorder.addEventListener("stop", () => {
+                    /* Event listener for "stop" event.*/
+                    mediaRecorder.addEventListener("stop", () => {
 
-                            /* Collect audio chunks into a Blob, create URL for it, update state. */
-                            const audioBlob = new Blob(audioChunks, {'type' : RecordAudio.mimeType});
-                            const audioUrl = URL.createObjectURL(audioBlob);
-                            this.setState( { audioUrl: audioUrl, audioBlob: audioBlob, isRecording: false, isDone: true });
-
-                            /* Update audioFileUrl attribute with the Blob URL */
-/*
-                            if (this.props.fileUrl) {
-                                this.props.fileUrl(audioUrl);
-                            }
-*/
-
-                            stream.getAudioTracks().forEach( track => track.stop());
-                        });
-
-                        this.setState( { mediaRecorder: mediaRecorder});
-
-                    })
+                        /* Collect audio chunks into a Blob, create URL for it, update state. */
+                        const audioBlob = new Blob(audioChunks, {'type' : RecordAudio.mimeType});
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        this.setState( { audioUrl: audioUrl, audioBlob: audioBlob, isRecording: false, isDone: true });
+                        stream.getAudioTracks().forEach( track => track.stop());
+                    });
+                    this.setState( { mediaRecorder: mediaRecorder});
+                })
             }
-
         }
     };
 
@@ -139,7 +122,6 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
 
     stopRecording = () => {
         if (this.state.isRecording) {
-            const mediaRecorder = this.state.mediaRecorder;
             if (this.state.mediaRecorder) {
                 this.state.mediaRecorder.stop();
             }
@@ -154,9 +136,7 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
 
     saveRecording = () => {
         const audioBlob = this.state.audioBlob;
-        //const microFlowName = this.props.microflowString!;
-        //const entityName = this.props.entityString!;
-        const actionFlow = this.props.actionEntity
+        const actionItem = this.props.actionItem
         const counter = this.saveCounter;
 
         mx.data.create({
@@ -173,58 +153,30 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                         mx.data.commit({
                             mxobj: obj,
                             callback: function () {
-                                if (actionFlow?.canExecute) actionFlow.execute()
+                                if (actionItem?.canExecute) actionItem.execute()
                             },
                             error: function (error) {
-                              mx.ui.error(`Error attempting to save audio.\nContact app support\n\n Error type: (2) ${error}`)
+                              mx.ui.error(`Error attempting to save audio.\nContact app support\n\n 1: ${error}`)
                             }
                         })
-/*
-                        if (actionFlow?.canExecute) {
-                            actionFlow?.execute()
-                        } else {
-                            mx.ui.error('Error calling action to handle new audio entity.\nContact app support\n\n Error type: (1)')
-                        }
-*/
-/*
-                        mx.data.action({
-                            params: {
-                                applyto: "selection",
-                                actionname: microFlowName,
-                                guids: [obj.toString()]
-                            },
-                            callback: function (){},    // Success
-
-                            error: function(error) {
-                                /!* Error in microflow call
-                                Likely an incorrect Microflow name listed in widget options, check microflowName variable *!/
-                                alert(`Error attempting to save audio.\nContact app support.\n\n (1) ${error}`)
-                                mx.data.remove({
-                                    guid: obj.toString(),
-                                    callback: function () {},   // Success
-                                    error: function () {}       // Error deleting object
-                                })
-
-                            }
-                        });
-*/
                     },
                     function (error) {
                         // Error in save document call
-                        mx.ui.error(`Error attempting to save audio.\nContact app support\n\n Error type: (2) ${error}`)
+                        mx.ui.error(`Error attempting to save audio.\nContact app support\n\n 2: ${error}`)
                         mx.data.remove({
                             guid: obj.toString(),
                             callback: function () {},       // Success
-                            error: function () {}           // Error deleting object
+                            error: function () {
+                                mx.ui.error(`Error attempting to save audio.\nContact app support\n\n 3: ${error}`)
+                            }           // Error deleting object
                         })
-
                     }
                 )
             },
             error: function (error) {
                 // Error in create entity call
                 // Likely an incorrect entity name listed in widget options, check entityName variable
-                mx.ui.error(`Error creating audio file.\nContact app support.\n\n Error type: (3) ${error}`)
+                mx.ui.error(`Error creating audio file.\nContact app support.\n\n 4: ${error}`)
             }
         })
         this.saveCounter++
