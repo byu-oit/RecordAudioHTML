@@ -9,3 +9,5 @@ node_modules
 *.launch
 mxproject
 coverage
+/dist/
+package-lock.json

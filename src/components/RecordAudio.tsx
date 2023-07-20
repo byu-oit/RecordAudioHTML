@@ -136,13 +136,19 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
 
     saveRecording = () => {
         const audioBlob = this.state.audioBlob;
-        const actionItem = this.props.actionItem
+        const actionItem = this.props.actionItem;
         const counter = this.saveCounter;
 
+        console.log("Saving recording..."); // testing only
+
         mx.data.create({
-            entity: "System.FileDocument",
+            entity: "HTMLAudio.AudioFile",
             callback : function (obj) {
+                console.log("guid: " + obj.toString()); // testing only
+                console.log("fileName: " + "new_audio" + counter + ".weba"); // testing only
                 obj.set("Name", "recording.weba");
+                // obj.set("Title", "My Test Recording");
+                obj.set("FileGuid", obj.getGuid());
 
                 mx.data.saveDocument(
                     obj.toString(),
@@ -156,18 +162,18 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                                 if (actionItem?.canExecute) actionItem.execute()
                             },
                             error: function (error) {
-                              mx.ui.error(`Error attempting to save audio.\nContact app support\n\n 1: ${error}`)
+                              mx.ui.error(`Error attempting to commit audio file.\nContact app support\n\n 1: ${error}`)
                             }
                         })
                     },
                     function (error) {
                         // Error in save document call
-                        mx.ui.error(`Error attempting to save audio.\nContact app support\n\n 2: ${error}`)
+                        mx.ui.error(`Error attempting to save audio file.\nContact app support\n\n 2: ${error}`)
                         mx.data.remove({
                             guid: obj.toString(),
                             callback: function () {},       // Success
                             error: function () {
-                                mx.ui.error(`Error attempting to save audio.\nContact app support\n\n 3: ${error}`)
+                                mx.ui.error(`Error attempting to remove audio file.\nContact app support\n\n 3: ${error}`)
                             }           // Error deleting object
                         })
                     }

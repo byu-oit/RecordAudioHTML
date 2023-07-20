@@ -31,7 +31,7 @@
             <propertyGroup caption="Audio File Management">
                 <property key="actionItem" type="action">
                     <caption>Handler Action</caption>
-                    <description>Set to "None" to just save the audio as a System.FileDocument entity. Set to "Microflow" to choose a microflow to run after saving and handle the entity.</description>
+                    <description>"Do nothing" saves the audio as a FileDocument entity. "Call a microflow" runs a microflow after saving.</description>
                 </property>
             </propertyGroup>
         </propertyGroup>

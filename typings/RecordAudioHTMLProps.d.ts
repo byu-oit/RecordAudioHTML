@@ -10,7 +10,8 @@ export interface RecordAudioHTMLContainerProps {
     name: string;
     class: string;
     style?: CSSProperties;
-    tabIndex: number;
+    tabIndex?: number;
+    id: string;
     actionItem?: ActionValue;
 }
 
