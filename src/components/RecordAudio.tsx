@@ -1,5 +1,5 @@
 import { CSSProperties, Component, ReactNode, createElement } from "react";
-import {ActionValue} from "mendix";
+import {ActionValue, ListValue} from "mendix";
 
 export interface RecordAudioProps {
     // fileUrl?: (value: string) => void;
@@ -9,6 +9,10 @@ export interface RecordAudioProps {
     tabIndex?: number;
     id?: string;
     actionItem?: ActionValue;
+    audioFileGuid?: string;
+    audioFileEntity?: object;
+    someData?: ListValue;
+    someProperty?: string;
 }
 
 export interface RecordAudioState {
@@ -56,6 +60,7 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
             alert('Your browser does not support recording with getUserMedia. Try a different browser.');
         }
         /* Set defaults for state variables */
+        // console.log("audioEntity type: " + this.props.audioFileEntity.)
         this.state = {
             isRecordingSupported: isRecordingSupported,
             isRecordingStarted: false,
@@ -120,35 +125,43 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         this.setState({ isRecording: false });
     };
 
-    stopRecording = () => {
-        if (this.state.isRecording) {
-            if (this.state.mediaRecorder) {
-                this.state.mediaRecorder.stop();
-            }
-            this.setState({
-                isDone: true,
-                isRecording: false,
-                isRecordButtonsEnabled: false
-            });
-            console.log("done"); // testing only
-        }
-    };
-
+    /**
+     * Modify this to check if the Action is "Do nothing". If it is, just save the file?
+     * If it's an actionable microflow or nanoflow, run that instead of saving the file.
+     * Let the microflow or nanoflow save the file if they want.
+     */
     saveRecording = () => {
         const audioBlob = this.state.audioBlob;
         const actionItem = this.props.actionItem;
         const counter = this.saveCounter;
+        const fileguid = this.props.audioFileGuid;
+        const someData = this.props.someData;
+
+        if(someData?.hasMoreItems) {
+            console.log("list offset: " + someData.offset);
+        }
+        // while(someData?.hasMoreItems) {
+        //     const dataItem = someData?.
+        //     console.log(" as" + someData?.)
+        // }
 
         console.log("Saving recording..."); // testing only
+        console.log("actionItem: " + actionItem);
+        // if(someData)
+        const myArray = this.props.someData?.items;
+        // console.log("totalCount of someData: " + myArray.);
 
         mx.data.create({
             entity: "HTMLAudio.AudioFile",
             callback : function (obj) {
-                console.log("guid: " + obj.toString()); // testing only
+                console.log("obj.toString: " + obj.toString()); // testing only
+                console.log("obj.getGuid: " + obj.getGuid()); // testing only
+                console.log("fileguid: " + fileguid); // testing only
                 console.log("fileName: " + "new_audio" + counter + ".weba"); // testing only
                 obj.set("Name", "recording.weba");
                 // obj.set("Title", "My Test Recording");
                 obj.set("FileGuid", obj.getGuid());
+                obj.set("TestGuid", fileguid);
 
                 mx.data.saveDocument(
                     obj.toString(),
@@ -162,7 +175,7 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                                 if (actionItem?.canExecute) actionItem.execute()
                             },
                             error: function (error) {
-                              mx.ui.error(`Error attempting to commit audio file.\nContact app support\n\n 1: ${error}`)
+                                mx.ui.error(`Error attempting to commit audio file.\nContact app support\n\n 1: ${error}`)
                             }
                         })
                     },
@@ -179,6 +192,12 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                     }
                 )
             },
+            // mx.data.action({
+            //     params: {
+            //         applyto: "selection",
+            //         actionname:
+            //     }
+            // })
             error: function (error) {
                 // Error in create entity call
                 // Likely an incorrect entity name listed in widget options, check entityName variable
@@ -186,6 +205,20 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
             }
         })
         this.saveCounter++
+    };
+
+    stopRecording = () => {
+        if (this.state.isRecording) {
+            if (this.state.mediaRecorder) {
+                this.state.mediaRecorder.stop();
+            }
+            this.setState({
+                isDone: true,
+                isRecording: false,
+                isRecordButtonsEnabled: false
+            });
+            console.log("done"); // testing only
+        }
     };
 
     deleteRecording = () => {

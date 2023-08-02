@@ -29,9 +29,31 @@
                 <systemProperty key="Visibility"/>
             </propertyGroup>
             <propertyGroup caption="Audio File Management">
+                <property key="audioEntity" type="datasource" isList="true" required="true">
+                    <caption>Audio File Entity</caption>
+                    <description>Where the audio will be stored</description>
+                </property>
+                <property key="audioFileGuid" type="attribute">
+                    <caption>Audio File GUID</caption>
+                    <description>Where the auto-generated file guid will be stored</description>
+                    <attributeTypes>
+                        <attributeType name="String"/>
+                    </attributeTypes>
+                </property>
                 <property key="actionItem" type="action">
                     <caption>Handler Action</caption>
                     <description>"Do nothing" saves the audio as a FileDocument entity. "Call a microflow" runs a microflow after saving.</description>
+                </property>
+                <property key="someData" type="datasource" isList="true" required="true">
+                    <caption>Some Data Source</caption>
+                    <description></description>
+                </property>
+                <property key="someProperty" type="attribute" required="true" dataSource="someData">
+                    <caption>Some Property</caption>
+                    <description></description>
+                    <attributeTypes>
+                        <attributeType name="String"/>
+                    </attributeTypes>
                 </property>
             </propertyGroup>
         </propertyGroup>

@@ -4,7 +4,7 @@
  * @author Mendix UI Content Team
  */
 import { CSSProperties } from "react";
-import { ActionValue } from "mendix";
+import { ActionValue, EditableValue, ListValue, ListAttributeValue } from "mendix";
 
 export interface RecordAudioHTMLContainerProps {
     name: string;
@@ -12,11 +12,19 @@ export interface RecordAudioHTMLContainerProps {
     style?: CSSProperties;
     tabIndex?: number;
     id: string;
+    audioEntity: ListValue;
+    audioFileGuid: EditableValue<string>;
     actionItem?: ActionValue;
+    someData: ListValue;
+    someProperty: ListAttributeValue<string>;
 }
 
 export interface RecordAudioHTMLPreviewProps {
     class: string;
     style: string;
+    audioEntity: {} | null;
+    audioFileGuid: string;
     actionItem: {} | null;
+    someData: {} | null;
+    someProperty: string;
 }
