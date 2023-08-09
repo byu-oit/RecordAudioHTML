@@ -7,13 +7,10 @@ declare function require(name: string): string;
 
 export class preview extends Component<RecordAudioHTMLPreviewProps> {
     render(): ReactNode {
-        // return <HelloWorldSample sampleText={this.props.sampleText} />;
-        // const inText = `[${this.props.inText}]`;
-        // return <RecordAudio inText={inText}/>;
-        // const file = `[${this.props.file}]`;
-        // return <RecordAudio file={file}/>;
-        // const fileUrl = `[${this.props.audioFileUrl}`;
-        return <RecordAudio/>;
+        return <RecordAudio
+            audioName={this.props.audioName}
+            audioGuid={this.props.audioGuid}
+        />;
     }
 }
 

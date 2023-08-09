@@ -29,27 +29,38 @@
                 <systemProperty key="Visibility"/>
             </propertyGroup>
             <propertyGroup caption="Audio File Management">
-                <property key="audioEntity" type="datasource" isList="true" required="true">
-                    <caption>Audio File Entity</caption>
-                    <description>Where the audio will be stored</description>
+                <property key="audioName" type="attribute" required="true">
+                    <caption>Name</caption>
+                    <description>Name of audio file</description>
+                    <attributeTypes>
+                        <attributeType name="String"/>
+                    </attributeTypes>
                 </property>
-                <property key="audioFileGuid" type="attribute">
-                    <caption>Audio File GUID</caption>
+                <property key="audioGuid" type="attribute" required="true">
+                    <caption>GUID</caption>
                     <description>Where the auto-generated file guid will be stored</description>
                     <attributeTypes>
                         <attributeType name="String"/>
                     </attributeTypes>
                 </property>
-                <property key="actionItem" type="action">
-                    <caption>Handler Action</caption>
-                    <description>"Do nothing" saves the audio as a FileDocument entity. "Call a microflow" runs a microflow after saving.</description>
+            </propertyGroup>
+            <propertyGroup caption="Custom Actions">
+                <property key="onSaveAction" type="action">
+                    <caption>OnSave Action</caption>
+                    <description>Action to run after save; for example "Call a microflow" runs a microflow after saving.</description>
                 </property>
-                <property key="someData" type="datasource" isList="true" required="true">
-                    <caption>Some Data Source</caption>
+                <property key="onStopAction" type="action">
+                    <caption>OnStop Action</caption>
+                    <description>Action to run after stop button pressed; for example "Call a microflow" runs a microflow after saving.</description>
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="Test Stuff">
+                <property key="testData" type="datasource" isList="true" required="true">
+                    <caption>Test Data Source</caption>
                     <description></description>
                 </property>
-                <property key="someProperty" type="attribute" required="true" dataSource="someData">
-                    <caption>Some Property</caption>
+                <property key="testProp" type="attribute" dataSource="testData" required="true">
+                    <caption>Test Property</caption>
                     <description></description>
                     <attributeTypes>
                         <attributeType name="String"/>

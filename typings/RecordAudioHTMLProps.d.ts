@@ -12,19 +12,21 @@ export interface RecordAudioHTMLContainerProps {
     style?: CSSProperties;
     tabIndex?: number;
     id: string;
-    audioEntity: ListValue;
-    audioFileGuid: EditableValue<string>;
-    actionItem?: ActionValue;
-    someData: ListValue;
-    someProperty: ListAttributeValue<string>;
+    audioName: EditableValue<string>;
+    audioGuid: EditableValue<string>;
+    onSaveAction?: ActionValue;
+    onStopAction?: ActionValue;
+    testData: ListValue;
+    testProp: ListAttributeValue<string>;
 }
 
 export interface RecordAudioHTMLPreviewProps {
     class: string;
     style: string;
-    audioEntity: {} | null;
-    audioFileGuid: string;
-    actionItem: {} | null;
-    someData: {} | null;
-    someProperty: string;
+    audioName: string;
+    audioGuid: string;
+    onSaveAction: {} | null;
+    onStopAction: {} | null;
+    testData: {} | null;
+    testProp: string;
 }
