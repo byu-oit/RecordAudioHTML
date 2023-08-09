@@ -29,7 +29,7 @@
                 <systemProperty key="Visibility"/>
             </propertyGroup>
             <propertyGroup caption="Audio File Management">
-                <property key="audioName" type="attribute" required="true">
+                <property key="audioName" type="attribute" required="true" onChange="onChangeAction">
                     <caption>Name</caption>
                     <description>Name of audio file</description>
                     <attributeTypes>
@@ -38,7 +38,7 @@
                 </property>
                 <property key="audioGuid" type="attribute" required="true">
                     <caption>GUID</caption>
-                    <description>Where the auto-generated file guid will be stored</description>
+                    <description>Where the auto-generated file guid is stored</description>
                     <attributeTypes>
                         <attributeType name="String"/>
                     </attributeTypes>
@@ -67,6 +67,12 @@
                     </attributeTypes>
                 </property>
             </propertyGroup>
+        </propertyGroup>
+        <propertyGroup caption="Events">
+            <property key="onChangeAction" type="action" required="false">
+                <caption>On change</caption>
+                <description/>
+            </property>
         </propertyGroup>
     </properties>
 </widget>

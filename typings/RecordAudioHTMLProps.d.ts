@@ -18,6 +18,7 @@ export interface RecordAudioHTMLContainerProps {
     onStopAction?: ActionValue;
     testData: ListValue;
     testProp: ListAttributeValue<string>;
+    onChangeAction?: ActionValue;
 }
 
 export interface RecordAudioHTMLPreviewProps {
@@ -29,4 +30,5 @@ export interface RecordAudioHTMLPreviewProps {
     onStopAction: {} | null;
     testData: {} | null;
     testProp: string;
+    onChangeAction: {} | null;
 }
