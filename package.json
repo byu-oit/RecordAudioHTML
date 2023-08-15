@@ -3,16 +3,20 @@
   "widgetName": "RecordAudioHTML",
   "version": "1.0.0",
   "description": "Record and save audio in browser",
-  "copyright": "2020 BYU",
+  "copyright": "© Mendix Technology BV 2022. All rights reserved.",
   "author": "Lauren Anderson",
+  "engines": {
+    "node": ">=16"
+  },
+  "license": "Apache-2.0",
   "config": {
     "projectPath": "C:\\Users\\laurenra\\Documents\\Mendix\\HTML Audio-lauren-mod",
     "mendixHost": "http://localhost:8080",
-    "developmentPort": "3000"
+    "developmentPort": 3000
   },
   "packagePath": "edu.byu.widget.web",
   "scripts": {
-    "start": "pluggable-widgets-tools start:server --open",
+    "start": "pluggable-widgets-tools start:server",
     "dev": "pluggable-widgets-tools start:web",
     "build": "pluggable-widgets-tools build:web",
     "lint": "pluggable-widgets-tools lint",
@@ -20,18 +24,21 @@
     "prerelease": "npm run lint",
     "release": "pluggable-widgets-tools release:web"
   },
-  "license": "Apache-2.0",
   "devDependencies": {
-    "@mendix/pluggable-widgets-tools": "^8.12.0",
-    "@types/big.js": "^4.0.5",
-    "@types/classnames": "^2.2.4",
-    "@types/dom-mediacapture-record": "^1.0.7",
-    "@types/react": "~16.9.0",
-    "@types/react-dom": "~16.9.0"
+    "@mendix/pluggable-widgets-tools": "^10.0.0",
+    "@types/big.js": "^6.0.2"
   },
   "dependencies": {
-    "@jeltemx/mendix-react-widget-utils": "^0.7.0",
+    "@types/dom-mediacapture-record": "^1.0.16",
     "classnames": "^2.2.6",
     "mendix-client": "^7.15.8"
+  },
+  "resolutions": {
+    "react": "18.2.0",
+    "react-native": "0.70.7"
+  },
+  "overrides": {
+    "react": "18.2.0",
+    "react-native": "0.70.7"
   }
 }

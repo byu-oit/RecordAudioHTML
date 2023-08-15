@@ -1,7 +1,5 @@
-import {CSSProperties, Component, ReactNode, createElement, ChangeEvent} from "react";
-import {ActionValue, ListValue, ListAttributeValue} from "mendix";
-import {Big} from "big.js";
-import get = Reflect.get;
+import {CSSProperties, Component, ReactNode, createElement} from "react";
+import {ActionValue, EditableValue, ListValue, ListAttributeValue} from "mendix";
 
 export interface RecordAudioProps {
     // fileUrl?: (value: string) => void;
@@ -10,13 +8,10 @@ export interface RecordAudioProps {
     style?: CSSProperties;
     tabIndex?: number;
     id?: string;
-    audioName: string;
-    audioGuid: string;
+    audioData?: ListValue;
+    audioName?: ListAttributeValue<string>;
+    testAudioName?: EditableValue<string>;
     onSaveAction?: ActionValue;
-    onStopAction?: ActionValue;
-    testData?: ListValue;
-    testProp?: ListAttributeValue<string>;
-    onLeave?: (value: string, changed: boolean) => void;
 }
 
 export interface RecordAudioState {
@@ -36,25 +31,6 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
 
     static mimeType: string = 'audio/webm;codecs=opus';
     saveCounter: number = 0;
-    private readonly onChangeHandle = this.onChange.bind(this);
-    private readonly onBlurHandle = this.onBlur.bind(this);
-    // readonly state: RecordAudioState = {
-    //     isRecordingSupported: false,
-    //     isRecordingStarted: false,
-    //     isRecording: false,
-    //     isPaused: false,
-    //     isDone: false,
-    //     isRecordButtonsEnabled: true,
-    //     editedNameValue: undefined
-    // };
-    // componentDidUpdate(prevProps: Readonly<RecordAudioProps>, prevState: Readonly<RecordAudioState>, snapshot?: any): void {
-    // }
-    componentDidUpdate(prevProps: RecordAudioProps): void {
-        if (this.props.audioName !== prevProps.audioName) {
-            this.setState({ editedNameValue: undefined});
-        }
-    }
-
 
     /**
      * Check to see if browser supports getUserMedia for recording before doing anything else.
@@ -65,7 +41,9 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         super(props);
 
         let isRecordingSupported = true;
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        // TODO: fix this to properly use .getUserMedia
+        // if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        if (navigator.mediaDevices) {
             if (MediaRecorder.isTypeSupported(RecordAudio.mimeType)) {
                 isRecordingSupported = true;
                 /* List the recording devices to let the user choose. Returns an array of InputDeviceInfo */
@@ -97,22 +75,29 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
     }
 
     private getCurrentName(): string {
-        return this.state.editedNameValue !== undefined
-            ? this.state.editedNameValue
-            : this.props.audioName;
-    }
 
-    private onChange(event: ChangeEvent<HTMLInputElement>): void {
-        this.setState({editedNameValue: event.target.value});
-    }
+        console.log("getCurrentName()..."); // testing only
 
-    private onBlur(): void {
-        const inputName = this.props.audioName;
-        const currentName = this.getCurrentName();
-        if (this.props.onLeave) {
-            this.props.onLeave(currentName, currentName != inputName);
-        }
-        this.setState({ editedNameValue: undefined});
+        // if (this.props.audioData?.status === 'available') {
+        //     const ds = this.props.audioData;
+        //     console.log("Getting audioData rows..."); // testing only
+        //
+        //     ds?.items?.forEach(( dataItem ) => {
+        //         console.log("dataItem.id = " + dataItem.id);
+        //     });
+        // }
+
+        // console.log("Getting audioName..."); // testing only
+        // const audioName = this.props.audioName ?? "no name";
+
+        console.log("Getting testAudioName..."); // testing only
+        const testAudioName = this.props.testAudioName;
+        console.log("testAudioName.value = " + testAudioName?.value);
+        // return this.state.editedNameValue !== undefined
+        //     ? this.state.editedNameValue
+        //     : audioName;
+
+        return "";
     }
 
     startRecording = () => {
@@ -170,6 +155,19 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
     };
 
     /**
+     * TODO: 1. Developer sets the entity for the audio as a widget configuration parameter.
+     * mx.data.create() requires it to be a String, not an object. Is there a way
+     * to introspect the entity name (as a string) from a datasource?
+     *
+     * TODO: 2. Allow user to enter a Name for the audio FileDocument before it is saved?
+     * Is this really important since we can use the guid as the name and the user can
+     * edit the object after saving it and rename it?
+     *
+     * TODO: 3. Remove all unnecessary parameters and code.
+     * Just use a datasource (entity) and (optionally) a Name.
+     */
+
+    /**
      * Create file and save recording into it.
      * 1. Must create a DataView of a specialization of System.FileDocument; for example, AudioFile.
      * 2. Must add a custom string attribute to it to hold autogenerated GUID; for example, AudioFile.FileGuid.
@@ -181,31 +179,39 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         console.log("createFileAndSave()..."); // testing only
 
         const audioBlob = this.state.audioBlob;
-        const audioName = this.props.audioName ?? "";
-        // const audioGuid = this.props.audioGuid ?? "";
-        const actionItem = this.props.onStopAction;
+        const actionItem = this.props.onSaveAction;
+        const audioName = this.props.testAudioName?.value;
 
-        // const myTestData = this.props.testData;
-        // const myTestProp = this.props.testProp?([0]) : {
-        //     // do something here?
-        // }
-        //
-        // if (this.props.testData?.status === 'available') {
-        //     myTestData?.items?.forEach((myItem) => {
-        //         console.log("myItem: " + myItem); // testing only
-        //     });
-        //     const myTestPropValue = "nonsense";
-        //
-        //     mx.data.get
-        // }
+
+        if (this.props.audioData?.status === 'available') {
+            const ds = this.props.audioData;
+            console.log("Getting audioData rows..."); // testing only
+
+            // const myDataObjectItem = ds?.items?[0];
+
+            ds?.items?.forEach(( dataItem ) => {
+                console.log("dataItem.id = " + dataItem.id);
+            });
+        }
+
+        console.log("Getting audioName..."); // testing only
+        const audioNameX = this.props.audioName ?? "no name";
+
+        //const attrValue = this.props.audioName?.get()
+        console.log("audidoNameX = " + audioNameX); // testing only
+
+        console.log("Getting testAudioName..."); // testing only
+        const testAudioName = this.props.testAudioName;
+        console.log("testAudioName.value = " + testAudioName?.value);
+
 
 
         mx.data.create({
             // TODO: get entity name from entered entityName parameter (not set up yet)
             entity: "HTMLAudio.AudioFile",
             callback : function (obj) {
-                const audioGuid = obj.getGuid();
-                var newFilename = "new-audio-" + audioGuid + ".weba";
+                const audioGuid = obj.getGuid(); // get guid of new FileDocument
+                var newFilename = "audio" + audioGuid + ".weba";
                 if (audioName) {
                     newFilename = audioName;
                 }
@@ -252,65 +258,6 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         })
     }
 
-    /**
-     * Save Recording
-     * 1. Must create a DataView of a specialization of System.FileDocument; for example, AudioFile.
-     * 2. Must add a custom string attribute to it to hold autogenerated GUID; for example, AudioFile.FileGuid.
-     * 3. Must put Record Audio HTML widget inside DataView.
-     * 4. Must set Name parameter to FileDocument.Name; for example, AudioFile.Name.
-     * 5. Must set GUID parameter custom string attribute; for example, AudioFile.FileGuid.
-     */
-    saveRecording = () => {
-        const audioBlob = this.state.audioBlob;
-        const audioName = this.props.audioName ?? "";
-        const audioGuid = this.props.audioGuid ?? "";
-        const actionItem = this.props.onSaveAction;
-
-        console.log("saveRecording()..."); // testing only
-        console.log("audioName: " + audioName); // testing only
-        console.log("audioGuid: " + audioGuid); // testing only
-
-        mx.data.get({
-            guid: audioGuid,
-            callback: function(obj) {
-                if(obj) {
-                    console.log("Attempting to saveDocument()...") // testing only
-                    mx.data.saveDocument(
-                        audioGuid,
-                        audioName,
-                        {},
-                        audioBlob as Blob,
-                        function (){
-                            mx.data.commit({
-                                mxobj: obj,
-                                callback: function () {
-                                    if (actionItem?.canExecute) actionItem.execute()
-                                },
-                                error: function (error) {
-                                    mx.ui.error(`Error attempting to commit audio file.\nContact app support\n\n 1: ${error}`)
-                                }
-                            })
-                        },
-                        function (error) {
-                            // Error in save document call
-                            mx.ui.error(`Error attempting to save audio file.\nContact app support\n\n 2: ${error}`)
-                            mx.data.remove({
-                                guid: obj.getGuid(),
-                                callback: function () {},       // Success
-                                error: function () {
-                                    mx.ui.error(`Error attempting to remove audio file.\nContact app support\n\n 3: ${error}`)
-                                }           // Error deleting object
-                            })
-                        }
-                    )
-                }
-                else {
-                    console.log("No MxObject received.");
-                }
-            }
-        });
-
-    }
 
     /**
      * Modify this to check if the Action is "Do nothing". If it is, just save the file?
@@ -319,60 +266,12 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
      */
     createObjectAndSaveRecording = () => {
         const audioBlob = this.state.audioBlob;
-        const actionItem = this.props.onSaveAction;
+        const onSaveAction = this.props.onSaveAction;
         const counter = this.saveCounter;
-        const fileguid = this.props.audioGuid;
 
         console.log("Saving recording..."); // testing only
-        console.log("actionItem: " + actionItem);
+        console.log("onSaveAction: " + onSaveAction);
 
-        mx.data.create({
-            entity: "HTMLAudio.AudioFile",
-            callback : function (obj) {
-                console.log("obj.toString: " + obj.toString()); // testing only
-                console.log("obj.getGuid: " + obj.getGuid()); // testing only
-                console.log("fileguid: " + fileguid); // testing only
-                console.log("fileName: " + "new_audio" + counter + ".weba"); // testing only
-                obj.set("Name", "recording.weba");
-                // obj.set("Title", "My Test Recording");
-                obj.set("FileGuid", obj.getGuid());
-
-                mx.data.saveDocument(
-                    obj.toString(),
-                    "new_audio" + counter + ".weba",
-                    {},
-                    audioBlob as Blob,
-                    function (){
-                        mx.data.commit({
-                            mxobj: obj,
-                            callback: function () {
-                                if (actionItem?.canExecute) actionItem.execute()
-                            },
-                            error: function (error) {
-                                mx.ui.error(`Error attempting to commit audio file.\nContact app support\n\n 1: ${error}`)
-                            }
-                        })
-                    },
-                    function (error) {
-                        // Error in save document call
-                        mx.ui.error(`Error attempting to save audio file.\nContact app support\n\n 2: ${error}`)
-                        mx.data.remove({
-                            guid: obj.toString(),
-                            callback: function () {},       // Success
-                            error: function () {
-                                mx.ui.error(`Error attempting to remove audio file.\nContact app support\n\n 3: ${error}`)
-                            }           // Error deleting object
-                        })
-                    }
-                )
-            },
-            error: function (error) {
-                // Error in create entity call
-                // Likely an incorrect entity name listed in widget options, check entityName variable
-                mx.ui.error(`Error creating audio file.\nContact app support.\n\n 4: ${error}`)
-            }
-        })
-        this.saveCounter++
     };
 
     stopRecording = () => {
@@ -449,7 +348,7 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                         <button type="button"
                                 disabled={!isDone}
                                 className={ isDone ? "btn-color-black btn-all btn-icon btn-enabled" : "btn-hide" }
-                                onClick={this.saveRecording}
+                                onClick={this.createFileAndSave}
                         >
                             <span className="glyphicon glyphicon-plus" ></span>
                         </button>
@@ -460,13 +359,11 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                         >
                             <span className="glyphicon glyphicon-remove"></span>
                         </button>
-                    </div>
-                    <div style={ { "margin" : "15px"}}>
                         <button type="button"
                                 disabled={!isDone}
                                 className={ isDone ? "btn-color-black btn-enabled" : "btn-hide"}
-                                onClick={this.createFileAndSave}
-                        >Create Object</button>
+                                onClick={this.getCurrentName}
+                        >Test</button>
                     </div>
                 </div>
             </div>
