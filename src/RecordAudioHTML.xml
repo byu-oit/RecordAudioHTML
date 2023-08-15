@@ -7,12 +7,6 @@
     <description>Record and save audio in browser</description>
     <icon/>
     <properties>
-        <propertyGroup caption="Delete General">
-            <property key="sampleText" type="string" required="false">
-                <caption>Default value</caption>
-                <description>Sample text input</description>
-            </property>
-        </propertyGroup>
         <propertyGroup caption="General">
             <!--
                         <propertyGroup caption="Data source">

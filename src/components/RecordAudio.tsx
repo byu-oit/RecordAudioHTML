@@ -74,18 +74,32 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         };
     }
 
-    private getCurrentName(): string {
+    private testStuff = () => {
+        if (this.props.audioData?.status === 'available') {
+            console.log("Getting audioData..."); // testing only
+            const ds = this.props.audioData;
+            console.log("Getting audioData rows..."); // testing only
 
-        console.log("getCurrentName()..."); // testing only
+            ds?.items?.forEach(( dataItem ) => {
+                console.log("dataItem.id = " + dataItem.id);
+                mx.data.get({
+                    guid: dataItem.id,
+                    callback: function(objs) {
+                        console.log("Entity received using dataItem.id: " + objs.getEntity());
+                    }
+                })
+            });
 
-        // if (this.props.audioData?.status === 'available') {
-        //     const ds = this.props.audioData;
-        //     console.log("Getting audioData rows..."); // testing only
-        //
-        //     ds?.items?.forEach(( dataItem ) => {
-        //         console.log("dataItem.id = " + dataItem.id);
-        //     });
-        // }
+            ds?.items?.forEach(( dataItem ) => {
+                console.log("ObjectItem = " + dataItem);
+                mx.data.get({
+                    guid: dataItem.id,
+                    callback: function(objs) {
+                        console.log("Entity received using ObjectItem: " + objs.getEntity());
+                    }
+                })
+            });
+        }
 
         // console.log("Getting audioName..."); // testing only
         // const audioName = this.props.audioName ?? "no name";
@@ -96,6 +110,13 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         // return this.state.editedNameValue !== undefined
         //     ? this.state.editedNameValue
         //     : audioName;
+
+    }
+
+    private getCurrentName(): string {
+
+        console.log("getCurrentName()..."); // testing only
+
 
         return "";
     }
@@ -253,7 +274,7 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
             error: function (error) {
                 // Error in create entity call
                 // Likely an incorrect entity name listed in widget options, check entityName variable
-                mx.ui.error(`Error creating audio file.\nContact app support.\n\n 4: ${error}`)
+                mx.ui.error(`Error creating audio file.\nContact app support.\n\n 4: ${error}`);
             }
         })
     }
@@ -362,7 +383,7 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                         <button type="button"
                                 disabled={!isDone}
                                 className={ isDone ? "btn-color-black btn-enabled" : "btn-hide"}
-                                onClick={this.getCurrentName}
+                                onClick={this.testStuff}
                         >Test</button>
                     </div>
                 </div>

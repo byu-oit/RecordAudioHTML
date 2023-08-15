@@ -9,7 +9,6 @@ export interface RecordAudioHTMLContainerProps {
     name: string;
     tabIndex?: number;
     id: string;
-    sampleText: string;
     audioData: ListValue;
     audioName: ListAttributeValue<string>;
     testAudioName: EditableValue<string>;
@@ -18,7 +17,6 @@ export interface RecordAudioHTMLContainerProps {
 
 export interface RecordAudioHTMLPreviewProps {
     readOnly: boolean;
-    sampleText: string;
     audioData: {} | { caption: string } | { type: string } | null;
     audioName: string;
     testAudioName: string;
