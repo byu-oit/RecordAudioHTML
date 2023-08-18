@@ -333,6 +333,11 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         const isRecordButtonsEnabled = this.state.isRecordButtonsEnabled;
         const isRecording = this.state.isRecording;
         const isDone = this.state.isDone;
+        // The following is to display all buttons at once (except pause)
+        // const isRecordingSupported = true;
+        // const isRecordButtonsEnabled = true;
+        // const isRecording = false;
+        // const isDone = true;
         return !isRecordingSupported ? <div className="not-supported">Recording not supported in this browser.</div> :
             <div className="outer-container">
                 <div className="widget-record-audio">
@@ -340,9 +345,11 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                             type="button"
                             disabled={!isRecordButtonsEnabled}
                             className={ isRecordButtonsEnabled ? "btn-record btn-all btn-icon btn-enabled" : "btn-record btn-all btn-icon" }
+                            // className={ "btn-record btn-all btn-icon btn-enabled" }
                             onClick={this.startRecording}
                     >
                         <div className={ isRecordButtonsEnabled ? "btn-record-circle" : "btn-record-circle-disabled" }>
+                        {/*<div className={ "btn-record-circle" }>*/}
                         </div>
                     </button>
                     <button style={ isRecording ? { display: 'inline-block' } : { display: 'none'} }
@@ -356,11 +363,13 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                     <button type="button"
                             disabled={!isRecordButtonsEnabled}
                             className={ isRecordButtonsEnabled ? "btn-color-black btn-all btn-icon btn-enabled" : "btn-color-grey btn-all btn-icon" }
+                            // className={ "btn-color-black btn-all btn-icon btn-enabled" }
                             onClick={this.stopRecording}
                     >
                         <span className="glyphicon glyphicon-stop"></span>
                     </button>
                     <div className={ isDone ? "widget-play-audio-show" : "widget-play-audio-hide" }>
+                    {/*<div className={ "widget-play-audio-show" }>*/}
                         <audio className={"audio-player"} controls src={this.state.audioUrl}>
                             Your browser does not support the <code>audio</code> element.
                         </audio>
