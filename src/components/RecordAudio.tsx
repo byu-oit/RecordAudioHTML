@@ -12,6 +12,7 @@ export interface RecordAudioProps {
     audioName?: ListAttributeValue<string>;
     testAudioName?: EditableValue<string>;
     onSaveAction?: ActionValue;
+    showAllButtons?: boolean;
 }
 
 export interface RecordAudioState {
@@ -329,15 +330,18 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         // <ButtonPause isRecording={this.state.isRecording} pauseHandler={this.pauseRecording}/>
         // TODO: 1. disable (grey) stop button unless this.state.isRecording, then enable it (make it black).
 
-        const isRecordingSupported = this.state.isRecordingSupported;
-        const isRecordButtonsEnabled = this.state.isRecordButtonsEnabled;
-        const isRecording = this.state.isRecording;
-        const isDone = this.state.isDone;
-        // The following is to display all buttons at once (except pause)
-        // const isRecordingSupported = true;
-        // const isRecordButtonsEnabled = true;
-        // const isRecording = false;
-        // const isDone = true;
+        var isRecordingSupported = this.state.isRecordingSupported;
+        var isRecordButtonsEnabled = this.state.isRecordButtonsEnabled;
+        var isRecording = this.state.isRecording;
+        var isDone = this.state.isDone;
+
+        // Display preview with all buttons (only for Design Mode in Studio Pro).
+        if (this.props.showAllButtons) {
+            isRecordingSupported = true;
+            isRecordButtonsEnabled = true;
+            isRecording = false;
+            isDone = true;
+        }
         return !isRecordingSupported ? <div className="not-supported">Recording not supported in this browser.</div> :
             <div className="outer-container">
                 <div className="widget-record-audio">

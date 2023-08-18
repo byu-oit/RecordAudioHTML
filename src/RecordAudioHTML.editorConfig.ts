@@ -169,6 +169,8 @@ export function getPreview(values: RecordAudioHTMLPreviewProps, isDarkMode: bool
     <text x="133" y="21" style="font: 14px sans-serif">0:12 / 0:12</text>
     <!-- Progress bar (black line) -->
     <line x1="215" y1="16" x2="295" y2="16" stroke="#000000" stroke-width="4"/>
+    <!-- Play head position (black circle) -->
+    <circle cx="220" cy="16" r="6" fill="#000000"/>
     <!-- Speaker icon (black) -->
     <polygon points="319,13 323,13 327,9 327,23 323,19 319,19" fill="#000000"/>
     <!-- Speaker sound (black arcs) -->
