@@ -12,7 +12,7 @@ export interface RecordAudioProps {
     audioName?: ListAttributeValue<string>;
     testAudioName?: EditableValue<string>;
     onSaveAction?: ActionValue;
-    showAllButtons?: boolean;
+    isDesignMode?: boolean;
 }
 
 export interface RecordAudioState {
@@ -336,7 +336,7 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         var isDone = this.state.isDone;
 
         // Display preview with all buttons (only for Design Mode in Studio Pro).
-        if (this.props.showAllButtons) {
+        if (this.props.isDesignMode) {
             isRecordingSupported = true;
             isRecordButtonsEnabled = true;
             isRecording = false;

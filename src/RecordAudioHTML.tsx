@@ -14,6 +14,7 @@ export class RecordAudioHTML extends Component<RecordAudioHTMLContainerProps> {
             audioName={this.props.audioName}
             testAudioName={testAudioName}
             onSaveAction={this.props.onSaveAction}
+            isDesignMode={false}
             />
     }
 }
