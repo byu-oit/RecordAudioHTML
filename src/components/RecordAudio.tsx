@@ -13,6 +13,7 @@ export interface RecordAudioProps {
     testAudioName?: EditableValue<string>;
     onSaveAction?: ActionValue;
     isDesignMode?: boolean;
+    isTestMode?: boolean;
 }
 
 export interface RecordAudioState {
@@ -334,6 +335,7 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         var isRecordButtonsEnabled = this.state.isRecordButtonsEnabled;
         var isRecording = this.state.isRecording;
         var isDone = this.state.isDone;
+        var isTestMode = this.props.isTestMode;
 
         // Display preview with all buttons (only for Design Mode in Studio Pro).
         if (this.props.isDesignMode) {
@@ -341,6 +343,7 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
             isRecordButtonsEnabled = true;
             isRecording = false;
             isDone = true;
+            isTestMode = false;
         }
         return !isRecordingSupported ? <div className="not-supported">Recording not supported in this browser.</div> :
             <div className="outer-container">
@@ -393,7 +396,8 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                         >
                             <span className="glyphicon glyphicon-remove"></span>
                         </button>
-                        <button type="button"
+                        <button style={ isTestMode ? { display: 'inline-block' } : { display: 'none'} }
+                                type="button"
                                 disabled={!isDone}
                                 className={ isDone ? "btn-color-black btn-enabled" : "btn-hide"}
                                 onClick={this.testStuff}

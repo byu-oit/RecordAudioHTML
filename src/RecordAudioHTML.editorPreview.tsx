@@ -4,8 +4,7 @@ import {RecordAudio} from "./components/RecordAudio";
 
 export class preview extends Component<RecordAudioHTMLPreviewProps> {
     render(): ReactNode {
-        return <RecordAudio isDesignMode={true}
-            />;
+        return <RecordAudio isDesignMode={true} />;
     }
 }
 
