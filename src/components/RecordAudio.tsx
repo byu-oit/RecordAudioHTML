@@ -177,6 +177,32 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         this.setState({ isRecording: false });
     };
 
+    stopRecording = () => {
+        if (this.state.isRecording) {
+            if (this.state.mediaRecorder) {
+                this.state.mediaRecorder.stop();
+            }
+            this.setState({
+                isDone: true,
+                isRecording: false,
+                isRecordButtonsEnabled: false
+            });
+            console.log("done"); // testing only
+        }
+    };
+
+    deleteRecording = () => {
+        if (this.state.audioUrl) {
+            URL.revokeObjectURL(this.state.audioUrl);
+            this.setState({
+                isDone: false,
+                isRecording: false,
+                isRecordingStarted: false,
+                isRecordButtonsEnabled: true
+            })
+        }
+    };
+
     /**
      * TODO: 1. Developer sets the entity for the audio as a widget configuration parameter.
      * mx.data.create() requires it to be a String, not an object. Is there a way
@@ -204,6 +230,8 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         const audioBlob = this.state.audioBlob;
         const actionItem = this.props.onSaveAction;
         const audioName = this.props.testAudioName?.value;
+        const audioUrl = this.state.audioUrl;
+        const componentScope = this; // get component scope so we can call its methods
 
 
         if (this.props.audioData?.status === 'available') {
@@ -253,7 +281,18 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                         mx.data.commit({
                             mxobj: obj,
                             callback: function () {
-                                if (actionItem?.canExecute) actionItem.execute()
+                                if (actionItem?.canExecute) actionItem.execute();
+                                componentScope.deleteRecording();
+                                // if (audioUrl) {
+                                    // URL.revokeObjectURL(audioUrl);
+                                    // componentScope.setState({
+                                    //     isDone: false,
+                                    //     isRecording: false,
+                                    //     isRecordingStarted: false,
+                                    //     isRecordButtonsEnabled: true
+                                    // })
+                                // }
+
                             },
                             error: function (error) {
                                 mx.ui.error(`Error attempting to commit audio file.\nContact app support\n\n 1: ${error}`);
@@ -278,7 +317,8 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
                 // Likely an incorrect entity name listed in widget options, check entityName variable
                 mx.ui.error(`Error creating audio file.\nContact app support.\n\n 4: ${error}`);
             }
-        })
+        },
+        componentScope)
     }
 
 
@@ -295,32 +335,6 @@ export class RecordAudio extends Component<RecordAudioProps, RecordAudioState> {
         console.log("Saving recording..."); // testing only
         console.log("onSaveAction: " + onSaveAction);
 
-    };
-
-    stopRecording = () => {
-        if (this.state.isRecording) {
-            if (this.state.mediaRecorder) {
-                this.state.mediaRecorder.stop();
-            }
-            this.setState({
-                isDone: true,
-                isRecording: false,
-                isRecordButtonsEnabled: false
-            });
-            console.log("done"); // testing only
-        }
-    };
-
-    deleteRecording = () => {
-        if (this.state.audioUrl) {
-            URL.revokeObjectURL(this.state.audioUrl);
-            this.setState({
-                isDone: false,
-                isRecording: false,
-                isRecordingStarted: false,
-                isRecordButtonsEnabled: true
-            })
-        }
     };
 
     render(): ReactNode {
